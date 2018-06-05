@@ -9,7 +9,8 @@ import (
 
 
 //类型转换
-func TypeConversion(value string, ntype string) (reflect.Value, error) {
+func TypeConversion(value string, tp reflect.Type) (reflect.Value, error) {
+	ntype:=tp.Name()
 	if ntype == "string" {
 		return reflect.ValueOf(value), nil
 	} else if ntype == "time.Time" {
