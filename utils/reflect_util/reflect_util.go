@@ -5,7 +5,7 @@ import (
 	"strconv"
 	"time"
 	"errors"
-	"../../log"
+	"common-go/log"
 )
 
 

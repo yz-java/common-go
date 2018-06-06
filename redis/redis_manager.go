@@ -4,7 +4,7 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"stathat.com/c/consistent"
 	"time"
-	"../log"
+	"common-go/log"
 )
 
 var (

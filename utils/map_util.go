@@ -4,7 +4,7 @@ package utils
 import (
 	"reflect"
 	"fmt"
-	"./reflect_util"
+	"common-go/utils/reflect_util"
 )
 
 //用map填充结构

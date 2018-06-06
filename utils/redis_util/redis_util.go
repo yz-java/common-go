@@ -6,8 +6,8 @@ import (
 	"github.com/garyburd/redigo/redis"
 	"reflect"
 	"strconv"
-	rd "../../redis"
-	"../../log"
+	rd "common-go/redis"
+	"common-go/log"
 )
 
 func Set(key string, value string, time string) bool {

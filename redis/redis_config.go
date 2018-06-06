@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"io/ioutil"
 	"time"
-	"../log"
+	"common-go/log"
 )
 
 type RedisConfig struct {
