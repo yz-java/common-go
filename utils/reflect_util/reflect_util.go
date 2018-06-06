@@ -5,6 +5,7 @@ import (
 	"strconv"
 	"time"
 	"errors"
+	"../../log"
 )
 
 
@@ -40,4 +41,33 @@ func TypeConversion(value string, tp reflect.Type) (reflect.Value, error) {
 	}
 
 	return reflect.ValueOf(value), errors.New("未知的类型：" + ntype)
+}
+
+func ToString(data interface{}) string  {
+
+	ntype:=reflect.ValueOf(data).Type().Name()
+	str:=""
+	if ntype == "string" {
+		str = data.(string)
+	} else if ntype == "time.Time" {
+		timestamp := data.(time.Time).Unix()
+		str= strconv.FormatInt(timestamp, 10)
+	} else if ntype == "Time" {
+		timestamp := data.(time.Time).Unix()
+		str= strconv.FormatInt(timestamp, 10)
+	} else if ntype == "int" {
+		str= strconv.Itoa(data.(int))
+	} else if ntype == "int8" {
+		str= strconv.Itoa(int(data.(int8)))
+	} else if ntype == "int32" {
+		str= strconv.Itoa(int(data.(int32)))
+	} else if ntype == "int64" {
+		str= strconv.FormatInt(data.(int64), 10)
+	} else if ntype == "float32" {
+		str= strconv.FormatFloat(float64(data),'f',6,32)
+	} else if ntype == "float64" {
+		str= strconv.FormatFloat(data,'f',6,64)
+	}
+	log.Logger.Warning("Unknown Type")
+	return str
 }
