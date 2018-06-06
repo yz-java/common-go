@@ -64,7 +64,7 @@ func ToString(data interface{}) string  {
 	} else if ntype == "int64" {
 		str= strconv.FormatInt(data.(int64), 10)
 	} else if ntype == "float32" {
-		str= strconv.FormatFloat(data.(float32),'f',6,32)
+		str= strconv.FormatFloat(data.(float64),'f',6,32)
 	} else if ntype == "float64" {
 		str= strconv.FormatFloat(data.(float64),'f',6,64)
 	}
