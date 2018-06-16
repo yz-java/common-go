@@ -3,12 +3,11 @@ package log
 import (
 	"os"
 	"github.com/op/go-logging"
-	"time"
 )
 var Logger = logging.MustGetLogger("logger")
 
 var format = logging.MustStringFormatter(
-	`%{color}%{time:15:04:05} %{shortfile} %{longfunc} >>> %{level:.4s} %{id:04d} %{message}%{color:reset}`,
+	`%{color}%{time:2006-01-02 15:04:05.000} %{shortfile} %{longfunc} >>> %{level:.4s} %{id:04d} %{message}%{color:reset}`,
 )
 func CreateLog(path string) {
 	logFile, err := os.OpenFile(path, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0777)
@@ -22,8 +21,6 @@ func CreateLog(path string) {
 	backend2Formatter := logging.NewBackendFormatter(backend2, format)
 
 	logging.SetBackend(backend1Formatter, backend2Formatter)
-	Logger.Notice("服务启动:", time.Now().Format("2006-01-02 15:04:05"))
-
 }
 
 
