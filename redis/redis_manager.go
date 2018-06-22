@@ -7,12 +7,9 @@ import (
 	"github.com/go-redis/redis"
 )
 
-var (
-	redisManager *RedisManager = nil
-	RedisConfigs []RedisConfig = nil
-)
-
 type RedisManager struct {
+
+	RedisConfigs []RedisConfig
 
 	ipPoolmap map[string]*redis.Client //IP与redis pool 映射
 
@@ -20,27 +17,17 @@ type RedisManager struct {
 }
 
 //实例化
-func instance() *RedisManager {
-	if RedisConfigs == nil {
+func (this *RedisManager)Instance(){
+	if this.RedisConfigs == nil {
 		log.Logger.Panic("redis configs is not instance")
 	}
-	manager := &RedisManager{}
-	manager.consistent = consistent.New()
-	manager.ipPoolmap = make(map[string]*redis.Client)
-	for _, conf := range RedisConfigs {
-		client := manager.createClient(conf)
-		manager.consistent.Add(conf.Host)
-		manager.ipPoolmap[conf.Host] = client
+	this.consistent = consistent.New()
+	this.ipPoolmap = make(map[string]*redis.Client)
+	for _, conf := range this.RedisConfigs {
+		client := this.createClient(conf)
+		this.consistent.Add(conf.Host)
+		this.ipPoolmap[conf.Host] = client
 	}
-	return manager
-}
-
-//获取单实例
-func GetInstance() *RedisManager {
-	if redisManager == nil {
-		redisManager = instance()
-	}
-	return redisManager
 }
 
 //生成redisClient

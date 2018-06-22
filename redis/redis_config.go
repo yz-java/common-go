@@ -8,6 +8,7 @@ import (
 )
 
 type RedisConfig struct {
+
 	MaxIdle int //最大空闲连接
 
 	IdleTimeout time.Duration //空闲连接超时时间
@@ -35,7 +36,5 @@ func LoadConfigFile(uri string) []RedisConfig {
 	if err != nil {
 		log.Logger.Error("load json redis config fail:", err)
 	}
-	RedisConfigs = configs
-
 	return configs
 }

@@ -2,16 +2,17 @@ package mysql
 
 import (
 	"github.com/go-xorm/xorm"
-	"log/syslog"
+	_"github.com/go-sql-driver/mysql"
 	"common-go/log"
 	"encoding/json"
 	"io/ioutil"
 	"time"
+	"os"
 )
 
-var DbConfig DBConfig
+var DbConfig *DBConfig = nil
 
-var engine *xorm.Engine
+var Engine *xorm.Engine = nil
 
 type DBConfig struct {
 	UserName string
@@ -30,7 +31,7 @@ func LoadDBConfig(uri string) {
 	if err != nil {
 		log.Logger.Error("load json redis config fail:", err)
 	}
-	DbConfig = dbConfig
+	DbConfig = &dbConfig
 }
 
 func CreateEngine() error  {
@@ -38,18 +39,25 @@ func CreateEngine() error  {
 		panic("please load db config")
 	}
 	var err error
-	engine,err=xorm.NewEngine("mysql", DbConfig.UserName+":"+DbConfig.Password+"@/"+DbConfig.DbName+"?charset=utf8")
+	Engine,err=xorm.NewEngine("mysql", DbConfig.UserName+":"+DbConfig.Password+"@/"+DbConfig.DbName+"?charset=utf8")
 	if err != nil {
+		log.Logger.Error(err)
 		return err
 	}
-	logWriter, err := syslog.New(syslog.LOG_DEBUG, "rest-xorm-example")
+	//logWriter, err := syslog.New(syslog.LOG_DEBUG, "rest-xorm-example")
+	//if err != nil {
+	//	log.Logger.Error("Fail to create xorm system logger: %v\n", err)
+	//	return err
+	//}
+	f, err := os.Create("sql.log")
 	if err != nil {
-		log.Logger.Error("Fail to create xorm system logger: %v\n", err)
+		println(err.Error())
 		return err
 	}
-	logger := xorm.NewSimpleLogger(logWriter)
+	//logger := xorm.NewSimpleLogger(logWriter)
+	logger := xorm.NewSimpleLogger(f)
 	logger.ShowSQL(true)
-	engine.SetLogger(logger)
+	Engine.SetLogger(logger)
 	return nil
 }
 //自动重连
@@ -57,7 +65,7 @@ func StartAutoConnect() {
 	go func() {
 		for{
 			time.Sleep(10)
-			err := engine.Ping()
+			err := Engine.Ping()
 			if err != nil {
 				CreateEngine()
 			}
