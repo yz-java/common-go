@@ -8,22 +8,24 @@
 package utils
 
 import (
-	"reflect"
 	"errors"
-	"strings"
+	"reflect"
 	"strconv"
+	"strings"
 )
+
 //自定义验证规则
 const (
-	NOT_EMPTY = "NotEmpty" //字符串不能为空
-	INT_MAX = "int-max" //int最大值
-	INT_MIN = "int-min" //int最小值
-	TYPE = "type" //类型
+	NOT_EMPTY      = "NotEmpty"    //字符串不能为空
+	INT_MAX        = "int-max"     //int最大值
+	INT_MIN        = "int-min"     //int最小值
+	TYPE           = "type"        //类型
 	STR_MAX_LENGTH = "str-max-len" //字符串最大长度
 	STR_MIN_LENGTH = "str-min-len" //字符串最小长度
-	STR_LENGTH = "str-len" //字符串长度
-	RANGE = "range" //元素必须在合适的范围内 例:1-100
+	STR_LENGTH     = "str-len"     //字符串长度
+	RANGE          = "range"       //元素必须在合适的范围内 例:1-100
 )
+
 //对外暴露结构体验证函数
 func StructValidate(bean interface{}) error {
 	fields := reflect.ValueOf(bean).Elem()
@@ -41,6 +43,7 @@ func StructValidate(bean interface{}) error {
 	}
 	return nil
 }
+
 //属性验证
 func fieldValidate(fieldName, valid string, value reflect.Value) error {
 	valids := strings.Split(valid, " ")
@@ -127,4 +130,15 @@ func fieldValidate(fieldName, valid string, value reflect.Value) error {
 		}
 	}
 	return nil
+}
+
+func StructToMap(obj interface{}) map[string]interface{} {
+	t := reflect.TypeOf(obj)
+	v := reflect.ValueOf(obj)
+
+	var data = make(map[string]interface{})
+	for i := 0; i < t.NumField(); i++ {
+		data[t.Field(i).Name] = v.Field(i).Interface()
+	}
+	return data
 }
